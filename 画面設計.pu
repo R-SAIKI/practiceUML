@@ -1,0 +1,44 @@
+@startsalt
+@startuml
+(*) --> "
+{{
+salt
+{+
+<b>ログイン
+  ID         | "12345 "
+  パスワード | "****  "
+  [  OK   ]
+}
+}}
+" as choose
+ 
+choose -right-> "
+{{
+salt
+{+
+<b>メインメニュー
+[グループ作成]
+[ユーザ追加]
+
+}
+}}
+" as wait
+wait -right-> "
+{{
+salt
+{+
+<b>製作中
+}
+}}
+" as success
+ 
+wait -down-> "
+{{
+salt
+{+
+<b>製作中
+}
+}}
+"
+@enduml
+@endsalt
