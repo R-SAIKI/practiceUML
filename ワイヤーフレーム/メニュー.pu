@@ -1,0 +1,48 @@
+@startsalt
+@startuml
+(*) --> "
+{{
+salt
+{+
+<b>メインメニュー
+[勤怠]
+[1日の予定]
+[メール]
+[会議使用状況]
+}
+}}
+" as subMenu
+subMenu -right-> "
+{{
+salt
+{+
+<b>製作中
+}
+}}
+" as subMenu2
+subMenu -down-> "
+{{
+salt
+{+
+<b>製作中
+}
+}}
+" as subMenu3
+subMenu -left-> "
+{{
+salt
+{+
+<b>製作中
+}
+}}
+" as subMenu4
+subMenu -up-> "
+{{
+salt
+{+
+<b>製作中
+}
+}}
+"
+@enduml
+@endsalt
