@@ -84,7 +84,11 @@ entity "使用状況テーブル" as use {
   共通制約 <<NOT NULL>>
 }
 
-user ||..o{ e02
-user |o..o{ e03
+user }|--|| auth
+user ||--o{ attend
+user ||--o{ mail
+user ||--o{ plan
+user ||--o{ use
+use }o--|| meeting
 
 @enduml
