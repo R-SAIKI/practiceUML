@@ -14,8 +14,6 @@ entity "ユーザーマスタ" as user {
   *権限ID : number <<FK>>
   *削除フラグ : number
   *更新時刻 : date
-  --
-  共通制約 <<NOT NULL>>
 }
 
 entity "権限マスタ" as auth {
@@ -23,8 +21,6 @@ entity "権限マスタ" as auth {
   --
   *権限名 : varchar(char 10)
   *更新時刻 : date
-  --
-  共通制約 <<NOT NULL>>
 }
 
 entity "勤怠マスタ" as attend {
@@ -35,19 +31,15 @@ entity "勤怠マスタ" as attend {
   *月 : varchar(char 2) 
   *日 : varchar(char 2) 
   *更新日時 : date
-  --
-  共通制約 <<NOT NULL>>
 }
 
 entity "メールテーブル" as mail {
   *ユーザーID : varchar(char 8) <<FK>>
   *受信OR送信 : number
-  *メッセージ : varchar(char 400) <<NULL可>>
+  *メッセージ : varchar(char 400)
   *月 : varchar(char 2) 
   *日 : varchar(char 2) 
   *追加日時 : date
-  --
-  共通制約 <<NOT NULL>>
 }
 
 entity "予定テーブル" as plan {
@@ -58,8 +50,6 @@ entity "予定テーブル" as plan {
   *月 : varchar(char 2) 
   *日 : varchar(char 2) 
   *追加日時 : date
-  --
-  共通制約 <<NOT NULL>>
 }
 
 entity "ミーティングルームテーブル" as meeting {
@@ -68,8 +58,6 @@ entity "ミーティングルームテーブル" as meeting {
   *開放開始時間 : varchar(char 4)
   *開放終了時間 : varchar(char 4)
   *更新日時 : date
-  --
-  共通制約 <<NOT NULL>>
 }
 
 entity "使用状況テーブル" as use {
@@ -80,8 +68,6 @@ entity "使用状況テーブル" as use {
   *開始時間 : date
   *終了時間 : date 
   *追加日時 : date
-  --
-  共通制約 <<NOT NULL>>
 }
 
 user }|--|| auth
