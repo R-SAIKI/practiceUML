@@ -1,0 +1,40 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "ログインフォームクラス" as login_form
+participant "ログインロジッククラス" as login_logic
+participant "データベースアクセスクラス" as data_acces
+participant "ユーザー情報クラス" as user_info
+database "データベース" as db
+
+user -> login_form: DoWork
+activate login_form
+
+login_form -> login_logic: data_accesreate Request
+activate login_logic
+
+login_logic -> data_acces: インスタンス生成
+activate data_acces
+data_acces --> login_logic:
+login_logic -> data_acces: ユーザー情報取得 引数1:ユーザーID 引数2:パスワード
+
+
+data_acces -> db: SQL発行 引数1:ユーザーID 引数2:パスワード
+db --> data_acces: ユーザーID 権限名
+data_acces -> user_info: インスタンス生成
+user_info --> data_acces:
+data_acces -> data_acces: ユーザー情報にユーザーIDと権限名を設定
+data_acces --> login_logic: ユーザー情報
+deactivate data_acces
+
+login_logic --> login_form: Request data_accesreated
+deactivate login_logic
+
+login_form --> user: Done
+deactivate login_form
+
+@enduml
