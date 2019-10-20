@@ -11,10 +11,28 @@ participant "データベースアクセスクラス" as data_acces
 participant "ユーザー情報クラス" as user_info
 database "データベース" as db
 
-user -> login_form: DoWork
+user -> login_form: 起動＆インスタンス生成
+login_form -> login_form: コンストラクタ
+activate login_form
+login_form -> login_form:ユーザーIDの最大文字数を二十文字に設定
+login_form -> login_form:パスワードの最大文字数を二十文字に設定
+
+login_form --> user:
+deactivate login_form
+user -> login_form: ログイン情報の入力
+user -> login_form: ログインボタン押下
+login_form -> login_form: ボタンクリックイベント
 activate login_form
 
-login_form -> login_logic: data_accesreate Request
+login_form -> login_form: 未入力チェック
+activate login_form
+alt 未入力の項目があるとき
+    login_form -> login_form: エラーメッセージ出力
+    login_form -> login_form: 未入力項目を赤色に設定
+end
+login_form --> login_form:戻り値無し
+deactivate login_form
+login_form -> login_logic: インスタンス生成
 activate login_logic
 
 login_logic -> data_acces: インスタンス生成
