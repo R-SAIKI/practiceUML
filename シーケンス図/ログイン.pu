@@ -33,12 +33,14 @@ end
 login_form --> login_form:戻り値無し
 deactivate login_form
 login_form -> login_logic: インスタンス生成
+login_logic --> login_form:
+login_form -> login_logic: ユーザーチェック 引数1:ユーザーID 引数2:パスワード
 activate login_logic
 
 login_logic -> data_acces: インスタンス生成
-activate data_acces
 data_acces --> login_logic:
 login_logic -> data_acces: ユーザー情報取得 引数1:ユーザーID 引数2:パスワード
+activate data_acces
 
 
 data_acces -> db: SQL発行 引数1:ユーザーID 引数2:パスワード
@@ -46,13 +48,20 @@ db --> data_acces: ユーザーID 権限名
 data_acces -> user_info: インスタンス生成
 user_info --> data_acces:
 data_acces -> data_acces: ユーザー情報にユーザーIDと権限名を設定
-data_acces --> login_logic: ユーザー情報
+data_acces --> login_logic: 戻り値:ユーザー情報
 deactivate data_acces
-
-login_logic --> login_form: Request data_accesreated
+alt ユーザー情報が存在する時
+    login_logic --> login_form: trueを返す
+else ユーザー情報がNULLの時
+    login_logic --> login_form: falseを返す
+end
 deactivate login_logic
-
-login_form --> user: Done
+alt ユーザーチェックの結果がtrueの時
+    login_form --> user: メニュー画面を起動
+else ユーザーチェックの結果がfalseの時
+    login_form -> login_form: ユーザーIDとパスワードををクリア
+    login_form --> user: ログイン画面
+end
 deactivate login_form
 
 @enduml
