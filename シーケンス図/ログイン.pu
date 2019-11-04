@@ -43,11 +43,12 @@ login_logic -> data_acces: ユーザー情報取得 引数1:ユーザーID 引�
 activate data_acces
 
 
-data_acces -> db: SQL発行 引数1:ユーザーID 引数2:パスワード
+data_acces -> db: SQL発行()引数1:ユーザーID 引数2:パスワード
 db --> data_acces: ユーザーID 権限名
 data_acces -> user_info: インスタンス生成
 user_info --> data_acces:
-data_acces -> data_acces: ユーザー情報にユーザーIDと権限名を設定
+data_acces -> user_info: ユーザー情報にユーザーIDと権限名を設定
+user_info --> data_acces:
 data_acces --> login_logic: 戻り値:ユーザー情報
 deactivate data_acces
 alt ユーザー情報が存在する時

@@ -1,0 +1,22 @@
+@startuml
+skinparam classAttributeIconSize 0
+class ログインフォーム {
+  + 初期設定()
+  - ボタンクリックイベント() : void
+}
+
+class ログインロジック {
+   + ユーザー情報取得(ユーザーID : string, パスワード : string) : ユーザー情報
+}
+
+class データベースアクセス {
+   + ユーザー情報取得(ユーザーID : string, パスワード : string) : ユーザー情報
+}
+
+class ユーザー情報 {
+   + String ユーザーID(get,set)
+   + String パスワード(get,set)
+   + String 権限名(get,set)
+   + DateTime 更新日時(get,set)
+}
+@enduml
