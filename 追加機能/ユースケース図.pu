@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor 一般ユーザー
+actor 管理者
+rectangle ポータルシステム {
+  一般ユーザー -- (全体周知)
+  一般ユーザー -- (個人メモ)
+  一般ユーザー -- (プロジェクト管理)
+  (全体周知) -- 管理者
+  (個人メモ) -- 管理者
+  (プロジェクト管理) -- 管理者
+}
+@enduml

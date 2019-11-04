@@ -18,7 +18,7 @@ subMenu -right-> "
 {{
 salt
 {+
-<b>製作中
+<b>ユーザー管理
 }
 }}
 " as subMenu2
