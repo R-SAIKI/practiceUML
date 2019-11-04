@@ -20,7 +20,8 @@ class データベースアクセス {
 
 class ユーザー情報 {
    + ユーザーID : String
+   + ユーザー名 : String
    + パスワード : String
-   + String 権限名 : String
+   + 権限名 : String
 }
 @enduml

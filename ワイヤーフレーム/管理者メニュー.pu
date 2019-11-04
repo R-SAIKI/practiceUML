@@ -19,6 +19,15 @@ subMenu -right-> "
 salt
 {+
 <b>ユーザー管理
+[新規登録]
+[編集]
+[削除]
+{#
+ユーザーID | ユーザー名 | 権限名
+value1 | value2 | value3
+value1 | value2 | value3
+value1 | value2 | value3
+}
 }
 }}
 " as subMenu2
