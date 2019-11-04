@@ -5,10 +5,10 @@ skinparam maxmessagesize 60
 skinparam sequenceParticipant underline
 
 actor "ユーザー" as user
-participant "ログインフォームクラス" as login_form
-participant "ログインロジッククラス" as login_logic
-participant "データベースアクセスクラス" as data_acces
-participant "ユーザー情報クラス" as user_info
+participant "ログインフォーム" as login_form
+participant "ログインロジック" as login_logic
+participant "データベースアクセス" as data_acces
+participant "ユーザー情報" as user_info
 database "データベース" as db
 
 user -> login_form: 起動＆インスタンス生成
@@ -26,36 +26,45 @@ activate login_form
 
 login_form -> login_form: 未入力チェック
 activate login_form
-alt 未入力の項目があるとき
+opt 未入力の項目があるとき
     login_form -> login_form: エラーメッセージ出力
     login_form -> login_form: 未入力項目を赤色に設定
+    login_form --> login_form:falseを返す
 end
-login_form --> login_form:戻り値無し
+login_form --> login_form:trueを返す
 deactivate login_form
+opt 未入力チェックの結果がfalse
+    login_form --> user:戻り値無し
+end
 login_form -> login_logic: インスタンス生成
 login_logic --> login_form:
-login_form -> login_logic: ユーザーチェック 引数1:ユーザーID 引数2:パスワード
+login_form -> login_logic: ユーザーチェック
 activate login_logic
-
 login_logic -> data_acces: インスタンス生成
 data_acces --> login_logic:
-login_logic -> data_acces: ユーザー情報取得 引数1:ユーザーID 引数2:パスワード
+login_logic -> data_acces: ユーザー情報取得
 activate data_acces
 
-
-data_acces -> db: SQL発行()引数1:ユーザーID 引数2:パスワード
-db --> data_acces: ユーザーID 権限名
 data_acces -> user_info: インスタンス生成
 user_info --> data_acces:
-data_acces -> user_info: ユーザー情報にユーザーIDと権限名を設定
+data_acces -> db: ログインSQL
+db --> data_acces: ユーザー情報データ
+data_acces -> user_info: ユーザー情報に取得したデータを設定
 user_info --> data_acces:
-data_acces --> login_logic: 戻り値:ユーザー情報
+data_acces --> login_logic: ユーザー情報を返す
 deactivate data_acces
-alt ユーザー情報が存在する時
-    login_logic --> login_form: trueを返す
-else ユーザー情報がNULLの時
+opt ユーザー情報がNULLの時
     login_logic --> login_form: falseを返す
 end
+login_logic -> login_logic: パスワードチェック
+activate login_logic
+alt パスワードが一致
+    login_logic --> login_logic: trueを返す
+else パスワードが不一致
+    login_logic --> login_logic: falseを返す
+end
+deactivate login_logic
+login_logic --> login_form: パスワードチェックの結果を返す
 deactivate login_logic
 alt ユーザーチェックの結果がtrueの時
     login_form --> user: メニュー画面を起動

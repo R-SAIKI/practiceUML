@@ -1,8 +1,0 @@
-@startuml
-skinparam classAttributeIconSize 0
-
-class データベースアクセス {
-   + ユーザー情報取得(ユーザーID : string, パスワード : string) : ユーザー情報
-}
-
-@enduml
