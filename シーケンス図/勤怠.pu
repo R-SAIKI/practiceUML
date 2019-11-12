@@ -1,0 +1,19 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "メニューフォーム" as menu_form
+participant "勤怠フォーム" as kintai_form
+
+user -> menu_form: 勤怠画面起動ボタン押下
+menu_form -> menu_form: ボタンクリックイベント
+activate menu_form
+menu_form -> kintai_form: 勤怠フォームのインスタンス生成
+menu_form -> kintai_form: 勤怠フォームを起動
+kintai_form --> user: 勤怠画面
+deactivate menu_form
+
+@enduml

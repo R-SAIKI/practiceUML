@@ -12,6 +12,7 @@ entity "ユーザーマスタ" as user {
   *名前 : text
   *パスワード : text
   *権限ID : numeric <<FK>>
+  *ログインフラグ : numeric
   *削除フラグ : numeric
   *更新時刻 : timestamp
 }

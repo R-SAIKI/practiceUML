@@ -1,0 +1,19 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "メニューフォーム" as menu_form
+participant "タスクフォーム" as tasc_form
+
+user -> menu_form: タスク画面起動ボタン押下
+menu_form -> menu_form: ボタンクリックイベント
+activate menu_form
+menu_form -> tasc_form: タスクフォームのインスタンス生成
+menu_form -> tasc_form: タスクフォームを起動
+tasc_form --> user: タスク画面
+deactivate menu_form
+
+@enduml

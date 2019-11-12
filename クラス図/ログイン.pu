@@ -1,27 +1,57 @@
 @startuml
 skinparam classAttributeIconSize 0
-class ログインフォーム {
-  + コンストラクタ()
-  - ボタンクリックイベント() : void
-  - 未入力チェック() : bool
-}
+ログイン.ログインフォーム --> ログイン.ログインロジック
+ログイン.ログインロジック --> ログイン.DBアクセス
+ログイン.ログインロジック --> 共通.共通ロジック
+共通.共通ロジック --> 共通.共通DBアクセス
+共通.共通ロジック - 共通.ユーザー状態
+ログイン.ログインロジック - 共通.ユーザー状態
 
-class ログインロジック {
-   + ユーザー情報 : ユーザー情報
-   + コンストラクタ()
-   + ユーザーチェック(ユーザーID : string, パスワード : string) : bool
-   - パスワードチェック(パスワード : string, ハッシュ値 : string)
-   + 権限取得() : void
+namespace ログイン #FFFFFF {
+  class ログインフォーム {
+    + コンストラクタ()
+    - ボタンクリックイベント() : void
+    - 未入力チェック() : bool
+  }
+  
+  class ログインロジック {
+     + ユーザー情報 : ユーザー情報
+     + コンストラクタ()
+     + ユーザーチェック(ユーザーID : string, パスワード : string) : bool
+     - パスワードチェック(パスワード : string, ハッシュ値 : string)
+  }
+  
+  class DBアクセス {
+     + ユーザー情報取得(ユーザーID : string) : ユーザー情報
+  }
 }
+namespace 共通 #FFFFFF {
+  enum ユーザー状態 {
+    ログイン = 0
+    ログアウト = 1
+  }
 
-class データベースアクセス {
-   + ユーザー情報取得(ユーザーID : string) : ユーザー情報
+  class 共通ロジック {
+    + ユーザー状態設定(ユーザーID : string, ユーザー状態 : ユーザー状態) : void
+  }
+  
+  class 共通DBアクセス {
+    + ログインフラグ更新(ユーザーID : string, ユーザー状態 : int) : void
+  }
 }
-
-class ユーザー情報 {
-   + ユーザーID : String
-   + ユーザー名 : String
-   + パスワード : String
-   + 権限名 : String
+namespace メニュー #FFFFFF {
+  class メニューフォーム {
+    + コンストラクタ(ユーザー情報 : ユーザー情報)
+    - ボタンクリックイベント() : void
+    - 未入力チェック() : bool
+  }
+}
+namespace データ #FFFFFF {
+  class ユーザー情報 {
+     + ユーザーID : String
+     + ユーザー名 : String
+     + パスワード : String
+     + 権限名 : String
+  }
 }
 @enduml

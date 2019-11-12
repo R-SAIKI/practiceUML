@@ -8,7 +8,10 @@ actor "ユーザー" as user
 participant "ログインフォーム" as login_form
 participant "メニューフォーム" as menu_form
 participant "ログインロジック" as login_logic
-participant "データベースアクセス" as data_acces
+participant "DBアクセス" as data_acces
+participant "共通ユーザー状態" as enum_user
+participant "共通ロジック" as common_logic
+participant "共通DBアクセス" as common_db
 participant "ユーザー情報" as user_info
 database "データベース" as db
 
@@ -38,41 +41,41 @@ opt 未入力チェックの結果がfalse
     login_form --> user:戻り値無し
 end
 login_form -> login_logic: インスタンス生成
-login_logic -> login_logic: コンストラクタ
-activate login_logic
-login_logic -> user_info: ユーザー情報のインスタンス生成
-activate user_info
-deactivate user_info
-user_info --> login_logic:
-login_logic --> login_form:
-deactivate login_logic
 login_form -> login_logic: ユーザーチェック
 activate login_logic
 login_logic -> data_acces: インスタンス生成
-data_acces --> login_logic:
 login_logic -> data_acces: ユーザー情報取得
 activate data_acces
 
 data_acces -> user_info: インスタンス生成
-activate user_info
-deactivate user_info
-user_info --> data_acces:
 data_acces -> db: ログインSQL
-activate db
-deactivate db
 db --> data_acces: ユーザー情報データ
 data_acces -> user_info: ユーザー情報に取得したデータを設定
-activate user_info
-deactivate user_info
 user_info --> data_acces:
 data_acces --> login_logic: ユーザー情報を返す
 deactivate data_acces
+login_logic -> user_info: プロパティのユーザー情報に取得したユーザー情報を設定
+user_info --> login_logic: 
 opt ユーザー情報がNULLの時
     login_logic --> login_form: falseを返す
 end
 login_logic -> login_logic: パスワードチェック
 activate login_logic
 alt パスワードが一致
+    login_logic -> enum_user: 定数ログインを参照
+    activate enum_user
+    enum_user --> login_logic: 引数に設定
+    deactivate enum_user
+    login_logic -> common_logic: ユーザー状態設定
+    activate common_logic
+    common_logic -> common_db: ログインフラグ更新
+    activate common_db
+    common_db -> db: ログインフラグ更新SQL
+    db --> common_db: 
+    common_db --> common_logic: 
+    deactivate common_db
+    common_logic --> login_logic: 
+    deactivate common_logic
     login_logic --> login_logic: trueを返す
 else パスワードが不一致
     login_logic --> login_logic: falseを返す
@@ -82,28 +85,20 @@ login_logic --> login_form: パスワードチェックの結果を返す
 deactivate login_logic
 deactivate login_logic
 alt ユーザーチェックの結果がtrueの時
-    login_form -> login_logic: 権限取得
-    activate login_logic
-    login_logic -> user_info: 権限名取得
+    login_form -> login_logic: ユーザー情報の参照
+    login_logic -> user_info: プロパティのユーザー情報の参照
     user_info --> login_logic: 
-    login_logic --> login_form: 権限名を返す
-    deactivate login_logic
+    login_logic --> login_form: 
     login_form -> menu_form: メニューフォームのインスタンスの生成
+    menu_form -> menu_form: コンストラクタ
     activate menu_form
-    deactivate menu_form
+    menu_form -> menu_form: メニューフォームに権限名を設定
+    menu_form -> menu_form: メニューフォームにユーザー名を設定
     menu_form --> login_form: 
-    login_form -> menu_form: メニューフォームに権限名を設定
-    activate menu_form
     deactivate menu_form
-    menu_form --> login_form: 
-    login_form -> menu_form: メニューフォームにユーザー名を設定
-    activate menu_form
-    deactivate menu_form
-    menu_form --> login_form: 
     login_form -> menu_form: メニューフォームを起動
-    activate menu_form
-    deactivate menu_form
     menu_form --> user: メニュー画面
+    login_form -> login_form: ログイン画面を閉じる
 else ユーザーチェックの結果がfalseの時
     login_form -> login_form: ユーザーIDとパスワードををクリア
     login_form --> user: ログイン画面
