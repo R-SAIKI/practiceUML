@@ -94,6 +94,10 @@ alt ユーザーチェックの結果がtrueの時
     activate menu_form
     menu_form -> menu_form: メニューフォームに権限名を設定
     menu_form -> menu_form: メニューフォームにユーザー名を設定
+    menu_form -> menu_form: 画面モード切り替え
+    activate menu_form
+    menu_form --> menu_form: 
+    deactivate menu_form
     menu_form --> login_form: 
     deactivate menu_form
     login_form -> menu_form: メニューフォームを起動
