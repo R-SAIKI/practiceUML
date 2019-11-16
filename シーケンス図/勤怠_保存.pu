@@ -1,0 +1,41 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "勤怠フォーム" as kintai_form
+participant "勤怠ロジック" as kintai_logic
+participant "勤怠DBアクセス" as kintai_data_acces
+database "データベース" as db
+
+user -> kintai_form: 保存ボタン押下
+kintai_form -> kintai_form: 保存ボタンクリックイベント
+activate kintai_form
+kintai_form -> kintai_form: 画面の勤怠情報から勤務時間情報リストを生成
+kintai_form -> kintai_form: 画面から月情報を取得
+kintai_form -> kintai_form: ユーザーIDと勤務時間情報リストを引数に設定
+kintai_form -> kintai_logic: 勤怠情報更新
+activate kintai_logic
+kintai_logic -> kintai_logic: ユーザーIDを引数に設定
+kintai_logic -> kintai_logic: 勤務時間情報リストから月情報を取得して引数に設定
+kintai_logic -> kintai_data_acces: 勤務時間情報更新
+activate kintai_data_acces
+kintai_data_acces -> kintai_data_acces: 勤怠情報リストの数分insert文生成
+kintai_data_acces -> db: 勤務時間情報更新SQL
+db --> kintai_data_acces:
+alt コミットの時
+    kintai_data_acces --> kintai_logic: 戻り値無し
+    kintai_logic --> kintai_form: 戻り値無し
+    kintai_form --> user:保存成功メッセージを返す
+else ロールバックの時
+    kintai_data_acces --> kintai_logic: 例外を投げる
+    deactivate kintai_data_acces
+    kintai_logic --> kintai_form: 
+    deactivate kintai_logic
+    kintai_form --> user:保存失敗メッセージを返す
+    deactivate kintai_form
+end
+
+@enduml

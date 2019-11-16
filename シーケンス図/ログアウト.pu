@@ -7,7 +7,6 @@ skinparam sequenceParticipant underline
 actor "ユーザー" as user
 participant "メニューフォーム" as menu_form
 participant "ログインフォーム" as login_form
-participant "共通ユーザー状態" as enum_user
 participant "共通ロジック" as common_logic
 participant "共通DBアクセス" as common_db
 database "データベース" as db
@@ -15,17 +14,16 @@ database "データベース" as db
 user -> menu_form: ログアウトボタン押下
 menu_form -> menu_form: ボタンクリックイベント
 activate menu_form
-menu_form -> enum_user: 定数ログアウトを参照
-enum_user --> menu_form: 引数に設定
+menu_form -> menu_form: 引数にユーザー状態をログアウトで設定
 menu_form -> common_logic: ユーザー状態設定
 activate common_logic
 common_logic -> common_db: ログインフラグ更新
 activate common_db
 common_db -> db: ログインフラグ更新SQL
 db --> common_db: 
-common_db --> common_logic: 
+common_db --> common_logic: 戻り値無し
 deactivate common_db
-common_logic --> menu_form: 
+common_logic --> menu_form: 戻り値無し
 deactivate common_logic
 menu_form -> login_form: ログインフォームのインスタンス生成
 menu_form -> login_form: ログインフォームを起動

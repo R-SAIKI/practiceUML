@@ -1,0 +1,54 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "メニューフォーム" as menu_form
+participant "勤怠フォーム" as kintai_form
+participant "勤怠ロジック" as kintai_logic
+participant "勤怠DBアクセス" as kintai_data_acces
+database "データベース" as db
+
+user -> menu_form: 勤怠画面起動ボタン押下
+menu_form -> menu_form: 勤怠起動ボタンクリックイベント
+activate menu_form
+menu_form -> kintai_form: 勤怠フォームのインスタンス生成
+kintai_form -> kintai_form: コンストラクタ
+activate kintai_form
+kintai_form -> kintai_form:勤怠フォームに引数のユーザー情報からログインユーザー名を設定
+kintai_form -> kintai_logic:勤怠ロジックのインスタンス生成
+kintai_form -> kintai_form:現在の月を引数に設定
+kintai_form -> kintai_form:勤怠情報設定
+activate kintai_form
+kintai_form -> kintai_logic:勤怠情報取得
+activate kintai_logic
+kintai_logic -> kintai_data_acces: 勤務時間情報取得
+activate kintai_data_acces
+kintai_data_acces -> db: 勤務時間取得SQL
+db --> kintai_data_acces: 勤務時間情報データ
+kintai_data_acces --> kintai_logic:一ヶ月分の勤務時間情報リスト
+deactivate kintai_data_acces
+loop 勤務時間情報リストを一件ずつ処理して勤怠情報リストを作成
+    kintai_logic -> kintai_logic: 勤務時間情報を勤怠情報に設定
+    kintai_logic -> kintai_logic: 勤務時間情報から日付を取得して勤怠情報に設定
+    kintai_logic -> kintai_logic: 勤務時間情報から曜日を取得して勤怠情報に設定
+    kintai_logic -> kintai_logic: 勤務時間情報から残業時間を計算して勤怠情報に設定
+end
+kintai_logic --> kintai_form: 一ヶ月分の勤怠情報リスト
+deactivate kintai_logic
+kintai_form -> kintai_form:プロパティの勤怠情報リストに設定
+kintai_form -> kintai_form:画面に勤怠情報表示
+activate kintai_form
+kintai_form --> kintai_form:戻り値無し
+deactivate kintai_form
+kintai_form --> kintai_form:戻り値無し
+deactivate kintai_form
+kintai_form --> menu_form:
+deactivate kintai_form
+menu_form -> kintai_form: 勤怠フォームを起動
+kintai_form --> user: 勤怠画面
+deactivate menu_form
+
+@enduml
