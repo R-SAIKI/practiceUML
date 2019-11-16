@@ -29,8 +29,6 @@ entity "勤怠マスタ" as attend {
   *勤務開始時間 : timestamp
   *勤務終了時間 : timestamp 
   *休憩時間 : numeric
-  *月 : text 
-  *日 : text 
   *更新日時 : timestamp
 }
 
@@ -38,8 +36,6 @@ entity "メールテーブル" as mail {
   *ユーザーID : varchar(20) <<FK>>
   *受信OR送信 : numeric
   *メッセージ : text
-  *月 : text 
-  *日 : text 
   *追加日時 : timestamp
 }
 
