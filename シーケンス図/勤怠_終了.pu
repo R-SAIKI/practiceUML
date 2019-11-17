@@ -1,0 +1,20 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "勤怠フォーム" as kintai_form
+
+user -> kintai_form: 勤怠終了ボタン押下
+kintai_form -> kintai_form: 勤怠終了ボタンクリックイベント
+activate kintai_form
+kintai_form -> kintai_form: 確認メッセージボックスを表示
+opt OKの時
+    kintai_form -> kintai_form: 勤怠フォームを閉じる
+end
+kintai_form --> user:
+deactivate kintai_form
+
+@enduml
