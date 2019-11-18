@@ -1,0 +1,41 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "メールフォーム" as mail_form
+participant "メールロジック" as mail_logic
+participant "メールDBアクセス" as mail_data_acces
+database "データベース" as db
+
+user -> mail_form: 受信ボックスボタン押下
+mail_form -> mail_form: 受信ボックスボタンクリックイベント
+activate mail_form
+mail_form -> mail_form: 列挙体の送受信の受信を引数に設定
+mail_form -> mail_form:メール表示 起動と同一なので省略
+mail_form -> mail_logic:
+mail_logic -> mail_data_acces:
+mail_data_acces -> db:
+db --> mail_data_acces:
+mail_data_acces --> mail_logic:
+mail_logic --> mail_form:
+mail_form --> user:
+deactivate mail_form
+
+user -> mail_form: 送信ボックスボタン押下
+mail_form -> mail_form: 送信ボックスボタンクリックイベント
+activate mail_form
+mail_form -> mail_form: 列挙体の送受信の送信を引数に設定
+mail_form -> mail_form:メール表示 起動と同一なので省略
+mail_form -> mail_logic:
+mail_logic -> mail_data_acces:
+mail_data_acces -> db:
+db --> mail_data_acces:
+mail_data_acces --> mail_logic:
+mail_logic --> mail_form:
+mail_form --> user:
+deactivate mail_form
+
+@enduml

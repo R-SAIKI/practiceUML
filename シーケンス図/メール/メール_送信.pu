@@ -1,0 +1,42 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "メールフォーム" as mail_form
+participant "新規作成フォーム" as mail_create_form
+participant "メールロジック" as mail_logic
+participant "メールDBアクセス" as mail_data_acces
+database "データベース" as db
+
+user -> mail_form: 新規作成ボタン押下
+mail_form -> mail_form: 新規作成ボタンクリックイベント
+activate mail_form
+mail_form -> mail_form: 画面のメール情報から勤務時間情報リストを生成
+mail_form -> mail_form: 画面から月情報を取得
+mail_form -> mail_form: ユーザーIDと勤務時間情報リストを引数に設定
+mail_form -> mail_logic: メール情報更新
+activate mail_logic
+mail_logic -> mail_logic: ユーザーIDを引数に設定
+mail_logic -> mail_logic: 勤務時間情報リストから月情報を取得して引数に設定
+mail_logic -> mail_data_acces: 勤務時間情報更新
+activate mail_data_acces
+mail_data_acces -> mail_data_acces: メール情報リストの数分insert文生成
+mail_data_acces -> db: 勤務時間情報更新SQL
+db --> mail_data_acces:
+alt コミットの時
+    mail_data_acces --> mail_logic: 戻り値無し
+    mail_logic --> mail_form: 戻り値無し
+    mail_form --> user:保存成功メッセージを返す
+else ロールバックの時
+    mail_data_acces --> mail_logic: 例外を投げる
+    deactivate mail_data_acces
+    mail_logic --> mail_form: 
+    deactivate mail_logic
+    mail_form --> user:保存失敗メッセージを返す
+    deactivate mail_form
+end
+
+@enduml

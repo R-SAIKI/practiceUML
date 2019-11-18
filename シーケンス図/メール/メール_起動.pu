@@ -1,0 +1,50 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "メニューフォーム" as menu_form
+participant "メールフォーム" as mail_form
+participant "メールロジック" as mail_logic
+participant "メールDBアクセス" as mail_data_acces
+database "データベース" as db
+
+user -> menu_form: メール画面起動ボタン押下
+menu_form -> menu_form: メール起動ボタンクリックイベント
+activate menu_form
+menu_form -> mail_form: メールフォームのインスタンス生成
+mail_form -> mail_form: コンストラクタ
+activate mail_form
+mail_form -> mail_form:メールフォームに引数のユーザー情報からログインユーザー名を設定
+mail_form -> mail_logic:メールロジックのインスタンス生成
+mail_form -> mail_form:引数にユーザーIDと列挙型の送受信の受信を設定
+mail_form -> mail_form:メール表示
+activate mail_form
+mail_form -> mail_form:引数にユーザーIDと列挙型の送受信の受信を設定
+mail_form -> mail_logic:メール取得
+activate mail_logic
+mail_logic -> mail_data_acces: メール受信取得
+activate mail_data_acces
+mail_data_acces -> db: メール受信取得SQL
+db --> mail_data_acces: メール情報データ
+mail_data_acces --> mail_logic:メール情報リスト
+deactivate mail_data_acces
+mail_logic --> mail_form: メール情報リスト
+deactivate mail_logic
+mail_form -> mail_form:プロパティのメール情報リストに設定
+mail_form -> mail_form:返信ボタンを非活性にする
+mail_form -> mail_form:メール一覧表示
+activate mail_form
+mail_form --> mail_form:戻り値無し
+deactivate mail_form
+mail_form --> mail_form:戻り値無し
+deactivate mail_form
+mail_form --> menu_form:
+deactivate mail_form
+menu_form -> mail_form: メールフォームを起動
+mail_form --> user: メール画面
+deactivate menu_form
+
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "メールフォーム" as mail_form
+participant "新規作成フォーム" as mail_create_form
+
+user -> mail_form: 新規作成ボックスボタン押下
+mail_form -> mail_form: 新規作成ボックスボタンクリックイベント
+activate mail_form
+mail_form -> mail_form:ユーザー情報を引数に設定
+mail_form -> mail_create_form: 新規作成フォームのインスタンス生成
+mail_create_form -> mail_create_form: コンストラクタ
+activate mail_create_form
+mail_create_form -> mail_create_form: ユーザー情報をプロパティに設定
+mail_create_form --> mail_form:
+deactivate mail_create_form
+mail_form -> mail_create_form: 新規作成フォームを起動
+deactivate mail_form
+mail_create_form --> user:新規作成画面
+
+user -> mail_form: 受信メール一覧を選択
+mail_form -> mail_form: 新規作成ボックスボタンクリックイベント
+activate mail_form
+mail_form -> mail_form:ユーザー情報を引数に設定
+mail_form -> mail_create_form: 新規作成フォームのインスタンス生成
+mail_create_form -> mail_create_form: コンストラクタ
+activate mail_create_form
+mail_create_form -> mail_create_form: ユーザー情報をプロパティに設定
+mail_create_form --> mail_form:
+deactivate mail_create_form
+mail_form -> mail_create_form: 新規作成フォームを起動
+deactivate mail_form
+mail_create_form --> user:新規作成画面
+
+@enduml

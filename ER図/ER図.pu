@@ -33,8 +33,9 @@ entity "勤怠テーブル" as attend {
 }
 
 entity "メールテーブル" as mail {
-  *ユーザーID : varchar(20) <<FK>>
-  *受信OR送信 : numeric
+  *送信者ユーザーID : varchar(20) <<FK>>
+  *受信者ユーザーID : varchar(20) <<FK>>
+  *件名 : text
   *メッセージ : text
   *追加日時 : timestamp
 }
