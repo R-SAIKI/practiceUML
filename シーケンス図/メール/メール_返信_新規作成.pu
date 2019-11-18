@@ -1,0 +1,44 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "メールフォーム" as mail_form
+participant "新規作成フォーム" as mail_create_form
+
+user -> mail_form: 受信メール一覧からメールを一行選択
+mail_form -> mail_form: 表クリックイベント
+activate mail_form
+mail_form -> mail_form: 返信ボタンを活性にする
+mail_form --> user:
+deactivate mail_form
+user -> mail_form: 返信ボタンを押下
+mail_form -> mail_form: 返信ボタンクリックイベント
+activate mail_form
+mail_form -> mail_form:ユーザー情報を引数に設定
+mail_form -> mail_form:選択されているメールのメール情報を引数に設定
+mail_form -> mail_create_form: 新規作成フォームのインスタンス生成
+mail_create_form -> mail_create_form: コンストラクタ
+activate mail_create_form
+mail_create_form -> mail_create_form: 引数のユーザー情報をプロパティに設定
+opt 引数のメール情報がnullでない時
+    mail_create_form -> mail_create_form: 引数のメール情報をプロパティに設定
+    mail_create_form -> mail_create_form: 宛先にメール情報のユーザーIDと名前を設定
+    mail_create_form -> mail_create_form: 件名にReとメール情報の件名を設定
+end
+mail_create_form --> mail_form:
+deactivate mail_create_form
+mail_form -> mail_create_form: 新規作成フォームを起動
+deactivate mail_form
+mail_create_form --> user:新規作成画面
+
+user -> mail_form: 新規作成ボックスボタン押下
+mail_form -> mail_form: 新規作成ボックスボタンクリックイベント
+activate mail_form
+mail_form -> mail_form:ユーザー情報を引数に設定
+mail_form -> mail_create_form: 新規作成フォームのインスタンス生成\n返信ボタンと同じなので省略
+mail_create_form --> user:新規作成画面
+
+@enduml
