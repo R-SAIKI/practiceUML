@@ -1,0 +1,37 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "ログインフォーム" as login_form
+participant "メニューフォーム" as menu_form
+participant "ログインロジック" as login_logic
+
+user -> login_form: 起動＆インスタンス生成
+
+user -> login_form: ログイン情報の入力
+user -> login_form: ログインボタン押下
+login_form -> login_form: ボタンクリックイベント
+activate login_form
+
+login_form -> login_logic: インスタンス生成
+login_form -> login_logic: ユーザーチェック
+activate login_logic
+alt ユーザーIDがUSERでパスワードがPASS
+    login_logic --> login_form: trueを返す
+else ユーザーとパスワードが不一致
+    login_logic --> login_form: falseを返す
+end
+deactivate login_logic
+alt ユーザーチェックの結果がtrue
+    login_form -> menu_form: インスタンス生成
+    login_form -> menu_form: 起動
+    menu_form --> user: メニュー画面
+else ユーザーチェックの結果がfalse
+    login_form --> user: エラーメッセージボックス
+end
+deactivate login_form
+
+@enduml
