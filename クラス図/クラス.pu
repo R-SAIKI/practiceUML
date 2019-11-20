@@ -63,10 +63,19 @@ namespace メール #FFFFFF {
     + コンストラクタ(ユーザー情報 : ユーザー情報, メール情報:デフォルトnull : メール情報)
     - 宛先ボタンクリックイベント() : void
     - 送信ボタンクリックイベント() : void
+    - メール情報リスト作成() : List<メール情報>
   }
   
+  class 宛先フォーム {
+    - アドレス情報マップ : HashMap<string,アドレス情報>
+    + 選択アドレス情報マップ : HashMap<string,アドレス情報>
+    + コンストラクタ()
+    - OKボタンクリックイベント() : void
+  }
+
   class メールロジック {
     + メール取得(ユーザーID : string, 送受信 : 送受信) : List<メール情報>
+    + メール送信(ユーザーID : string, 送信情報 : 送信情報) : List<メール情報>
   }
   
   class メールDBアクセス {
@@ -178,6 +187,12 @@ namespace データ #FFFFFF {
      + メッセージ : String
      + 追加日時 : DateTime
   }
+
+  class アドレス情報 {
+     + ユーザーID : String
+     + ユーザー名 : String
+  }
+
 }
 
 @enduml

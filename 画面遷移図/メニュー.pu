@@ -54,7 +54,7 @@ mail_transfer -down-> "
 salt
 {+
 <b>新規作成
-[宛先] | "useridIshigami(石神)"
+[宛先] | useridIshigami(石神)
 件名 | "お知らせ"
 内容
 {S
@@ -65,6 +65,21 @@ salt
 .
 }
 [送信]
+}
+}}
+" as atesaki
+atesaki -down-> "
+{{
+salt
+{+
+<b>宛先
+{#
+名前
+轟(IdTodorogi)
+斎藤(IdSaito)
+石神(IdIshi)
+}
+[OK]
 }
 }}
 " as subMenu3

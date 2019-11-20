@@ -5,38 +5,51 @@ skinparam maxmessagesize 60
 skinparam sequenceParticipant underline
 
 actor "ユーザー" as user
-participant "メールフォーム" as mail_form
 participant "新規作成フォーム" as mail_create_form
+participant "宛先" as adress_form
 participant "メールロジック" as mail_logic
 participant "メールDBアクセス" as mail_data_acces
 database "データベース" as db
 
-user -> mail_form: 新規作成ボタン押下
-mail_form -> mail_form: 新規作成ボタンクリックイベント
-activate mail_form
-mail_form -> mail_form: 画面のメール情報から勤務時間情報リストを生成
-mail_form -> mail_form: 画面から月情報を取得
-mail_form -> mail_form: ユーザーIDと勤務時間情報リストを引数に設定
-mail_form -> mail_logic: メール情報更新
+user -> mail_create_form: 宛先ボタン押下
+mail_create_form -> mail_create_form: 宛先ボタンクリックイベント
+activate mail_create_form
+mail_create_form -> adress_form: インスタンス生成
+adress_form -> adress_form: コンストラクタ
+activate adress_form
+adress_form -> mail_logic: アドレスハッシュマップ取得
 activate mail_logic
-mail_logic -> mail_logic: ユーザーIDを引数に設定
-mail_logic -> mail_logic: 勤務時間情報リストから月情報を取得して引数に設定
-mail_logic -> mail_data_acces: 勤務時間情報更新
+mail_logic -> mail_data_acces: アドレス情報リスト取得
 activate mail_data_acces
-mail_data_acces -> mail_data_acces: メール情報リストの数分insert文生成
-mail_data_acces -> db: 勤務時間情報更新SQL
-db --> mail_data_acces:
-alt コミットの時
-    mail_data_acces --> mail_logic: 戻り値無し
-    mail_logic --> mail_form: 戻り値無し
-    mail_form --> user:保存成功メッセージを返す
-else ロールバックの時
-    mail_data_acces --> mail_logic: 例外を投げる
-    deactivate mail_data_acces
-    mail_logic --> mail_form: 
-    deactivate mail_logic
-    mail_form --> user:保存失敗メッセージを返す
-    deactivate mail_form
+mail_data_acces -> db: アドレス情報取得SQL
+db --> mail_data_acces: アドレス情報データ
+mail_data_acces --> mail_logic: アドレス情報リスト
+deactivate mail_data_acces
+mail_logic -> mail_logic: ユーザー名とユーザーIDを合わせたハッシュキーを作成
+mail_logic -> mail_logic: アドレス情報リストにキーを設定して、ハッシュマップを生成
+mail_logic --> adress_form: アドレスハッシュマップ
+deactivate mail_logic
+adress_form -> adress_form: プロパティのアドレスハッシュマップに設定
+adress_form -> adress_form: アドレスハッシュマップのキーを全て表示
+adress_form --> mail_create_form: 
+deactivate adress_form
+mail_create_form -> adress_form: 宛先フォーム起動
+adress_form --> user: 宛先画面 
+
+user -> adress_form: OKボタン押下
+activate adress_form
+opt 選択されているアドレスがある時
+    adress_form -> adress_form: 選択アドレス情報マップに設定
 end
+adress_form -> adress_form: 宛先画面を閉じる
+adress_form --> mail_create_form: 
+deactivate adress_form
+mail_create_form -> adress_form: 選択アドレスマップ参照
+adress_form --> mail_create_form: 
+opt 選択アドレスマップがnullではない時
+    mail_create_form -> mail_create_form: 宛先テキストボックスにカンマ区切りでアドレスを表示
+end
+mail_create_form --> user: 
+deactivate mail_create_form
 
 @enduml

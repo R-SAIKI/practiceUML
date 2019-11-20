@@ -11,11 +11,15 @@ participant "メールロジック" as mail_logic
 participant "メールDBアクセス" as mail_data_acces
 database "データベース" as db
 
-user -> mail_form: 新規作成ボタン押下
-mail_form -> mail_form: 新規作成ボタンクリックイベント
-activate mail_form
-mail_form -> mail_form: 画面のメール情報から勤務時間情報リストを生成
-mail_form -> mail_form: 画面から月情報を取得
+user -> mail_create_form: 送信ボタン押下
+mail_create_form -> mail_create_form: 送信ボタンクリックイベント
+mail_create_form -> mail_create_form: List<メール情報>のインスタンスを生成
+activate mail_create_form
+mail_create_form -> mail_create_form: メール情報リスト作成
+activate mail_create_form
+mail_create_form -> mail_create_form: 送信情報のインスタンスを生成
+mail_create_form -> mail_create_form: 送信情報のインスタンスを生成
+mail_create_form -> mail_logic: 
 mail_form -> mail_form: ユーザーIDと勤務時間情報リストを引数に設定
 mail_form -> mail_logic: メール情報更新
 activate mail_logic
