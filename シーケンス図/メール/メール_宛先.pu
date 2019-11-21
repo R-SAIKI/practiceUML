@@ -15,9 +15,10 @@ user -> mail_create_form: 宛先ボタン押下
 mail_create_form -> mail_create_form: 宛先ボタンクリックイベント
 activate mail_create_form
 mail_create_form -> adress_form: インスタンス生成
+mail_create_form -> adress_form: 引数に
 adress_form -> adress_form: コンストラクタ
 activate adress_form
-adress_form -> mail_logic: アドレスハッシュマップ取得
+adress_form -> mail_logic: アドレス情報取得
 activate mail_logic
 mail_logic -> mail_data_acces: アドレス情報リスト取得
 activate mail_data_acces
@@ -44,8 +45,8 @@ end
 adress_form -> adress_form: 宛先画面を閉じる
 adress_form --> mail_create_form: 
 deactivate adress_form
-mail_create_form -> adress_form: 選択アドレスマップ参照
-adress_form --> mail_create_form: 
+mail_create_form -> adress_form: 選択アドレスマップ取得
+adress_form --> mail_create_form: 選択アドレスマップを
 opt 選択アドレスマップがnullではない時
     mail_create_form -> mail_create_form: 宛先テキストボックスにカンマ区切りでアドレスを表示
 end
