@@ -22,10 +22,14 @@ mail_form -> mail_form:選択されているメールのメール情報を引数
 mail_form -> mail_create_form: 新規作成フォームのインスタンス生成
 mail_create_form -> mail_create_form: コンストラクタ
 activate mail_create_form
+mail_create_form -> mail_create_form: 送信ボタンを非活性にする
 mail_create_form -> mail_create_form: 引数のユーザー情報をプロパティに設定
-mail_create_form -> mail_create_form: 引数のメール情報をメール情報リストに設定
-mail_create_form -> mail_create_form: 宛先にメール情報のユーザーIDと名前を設定
-mail_create_form -> mail_create_form: 件名にReとメール情報の件名を設定
+opt 引数のメール情報がnullではない時
+    mail_create_form -> mail_create_form: 引数のメール情報をメール情報リストに設定
+    mail_create_form -> mail_create_form: 宛先にメール情報のユーザーIDと名前を設定
+    mail_create_form -> mail_create_form: 件名にReとメール情報の件名を設定
+    mail_create_form -> mail_create_form: 送信ボタンを活性にする
+end
 mail_create_form --> mail_form:
 deactivate mail_create_form
 mail_form -> mail_create_form: 新規作成フォームを起動
@@ -36,7 +40,6 @@ user -> mail_form: 新規作成ボックスボタン押下
 mail_form -> mail_form: 新規作成ボックスボタンクリックイベント
 activate mail_form
 mail_form -> mail_form:ユーザー情報を引数に設定
-mail_form -> mail_form:メール情報リストのインスタンスを生成し引数に設定
 mail_form -> mail_create_form: 新規作成フォームのインスタンス生成\n返信ボタンと同じなので省略
 mail_create_form --> user:新規作成画面
 

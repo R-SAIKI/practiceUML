@@ -6,7 +6,7 @@ skinparam sequenceParticipant underline
 
 actor "ユーザー" as user
 participant "新規作成フォーム" as mail_create_form
-participant "宛先" as adress_form
+participant "宛先フォーム" as adress_form
 participant "メールロジック" as mail_logic
 participant "メールDBアクセス" as mail_data_acces
 database "データベース" as db
@@ -14,24 +14,31 @@ database "データベース" as db
 user -> mail_create_form: 宛先ボタン押下
 mail_create_form -> mail_create_form: 宛先ボタンクリックイベント
 activate mail_create_form
+mail_create_form -> mail_create_form: メール情報リストのインスタンス生成
 mail_create_form -> adress_form: インスタンス生成
-mail_create_form -> adress_form: 引数に
+mail_create_form -> adress_form: 引数にメール情報リスト
 adress_form -> adress_form: コンストラクタ
 activate adress_form
 adress_form -> mail_logic: アドレス情報取得
 activate mail_logic
-mail_logic -> mail_data_acces: アドレス情報リスト取得
+mail_logic -> mail_data_acces: アドレス情報取得
 activate mail_data_acces
 mail_data_acces -> db: アドレス情報取得SQL
 db --> mail_data_acces: アドレス情報データ
-mail_data_acces --> mail_logic: アドレス情報リスト
+mail_data_acces --> mail_logic: メール情報リスト
 deactivate mail_data_acces
-mail_logic -> mail_logic: ユーザー名とユーザーIDを合わせたハッシュキーを作成
-mail_logic -> mail_logic: アドレス情報リストにキーを設定して、ハッシュマップを生成
-mail_logic --> adress_form: アドレスハッシュマップ
+mail_logic --> adress_form: メール情報リスト
 deactivate mail_logic
-adress_form -> adress_form: プロパティのアドレスハッシュマップに設定
-adress_form -> adress_form: アドレスハッシュマップのキーを全て表示
+adress_form -> adress_form: プロパティのメール情報リストに設定
+loop メール情報リストの数だけループ
+    adress_form -> mail_logic: アドレス名生成
+    activate mail_logic
+    mail_logic -> mail_logic: ユーザーIDとユーザー名から宛先名を作成
+    mail_logic --> adress_form: アドレス名
+    deactivate mail_logic
+    adress_form -> adress_form: コントロールの名前にユーザーIDを設定
+    adress_form -> adress_form: 宛先名をコントロールに表示
+end
 adress_form --> mail_create_form: 
 deactivate adress_form
 mail_create_form -> adress_form: 宛先フォーム起動
@@ -39,16 +46,30 @@ adress_form --> user: 宛先画面
 
 user -> adress_form: OKボタン押下
 activate adress_form
+adress_form -> adress_form: メール情報リストのインスタンス生成
 opt 選択されているアドレスがある時
-    adress_form -> adress_form: 選択アドレス情報マップに設定
+    loop 選択されているアドレスの数だけループ
+        adress_form -> adress_form: 選択アドレスのコントロールの名前を取得
+        adress_form -> adress_form: コントロールの名前でメール情報リストをユーザーIDで検索
+        adress_form -> adress_form: 検索されたメール情報をメール情報リストに追加
+    end
 end
+adress_form -> adress_form: 上記のメール情報リストをプロパティのメール情報リストに設定
 adress_form -> adress_form: 宛先画面を閉じる
 adress_form --> mail_create_form: 
 deactivate adress_form
-mail_create_form -> adress_form: 選択アドレスマップ取得
-adress_form --> mail_create_form: 選択アドレスマップを
-opt 選択アドレスマップがnullではない時
-    mail_create_form -> mail_create_form: 宛先テキストボックスにカンマ区切りでアドレスを表示
+mail_create_form -> mail_create_form: プロパティのメール情報リストを参照
+opt メール情報リストがnullではない時
+    loop メール情報リストの数だけループ
+        mail_create_form -> mail_logic: アドレス名生成
+        activate mail_logic
+        mail_logic -> mail_logic: ユーザーIDとユーザー名から宛先名を作成
+        mail_logic --> mail_create_form: アドレス名
+        deactivate mail_logic
+        mail_create_form -> mail_create_form: アドレス名をカンマ区切りの文字列で連結
+    end
+    mail_create_form -> mail_create_form: 連結したアドレス名を画面に表示
+    mail_create_form -> mail_create_form: 送信ボタンを活性にする
 end
 mail_create_form --> user: 
 deactivate mail_create_form

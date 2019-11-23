@@ -13,34 +13,30 @@ database "データベース" as db
 
 user -> mail_create_form: 送信ボタン押下
 mail_create_form -> mail_create_form: 送信ボタンクリックイベント
-mail_create_form -> mail_create_form: List<メール情報>のインスタンスを生成
 activate mail_create_form
-mail_create_form -> mail_create_form: メール情報リスト作成
-activate mail_create_form
-mail_create_form -> mail_create_form: 送信情報のインスタンスを生成
-mail_create_form -> mail_create_form: 送信情報のインスタンスを生成
-mail_create_form -> mail_logic: 
-mail_form -> mail_form: ユーザーIDと勤務時間情報リストを引数に設定
-mail_form -> mail_logic: メール情報更新
-activate mail_logic
-mail_logic -> mail_logic: ユーザーIDを引数に設定
-mail_logic -> mail_logic: 勤務時間情報リストから月情報を取得して引数に設定
-mail_logic -> mail_data_acces: 勤務時間情報更新
-activate mail_data_acces
-mail_data_acces -> mail_data_acces: メール情報リストの数分insert文生成
-mail_data_acces -> db: 勤務時間情報更新SQL
-db --> mail_data_acces:
-alt コミットの時
-    mail_data_acces --> mail_logic: 戻り値無し
-    mail_logic --> mail_form: 戻り値無し
-    mail_form --> user:保存成功メッセージを返す
-else ロールバックの時
-    mail_data_acces --> mail_logic: 例外を投げる
-    deactivate mail_data_acces
-    mail_logic --> mail_form: 
-    deactivate mail_logic
-    mail_form --> user:保存失敗メッセージを返す
-    deactivate mail_form
+mail_create_form -> mail_create_form: 送信確認のダイアログボックス
+mail_create_form --> user: 送信確認
+user -> mail_create_form: はいorいいえ
+opt 送信確認がいいえの時
+    mail_create_form --> user: 処理を終了    
 end
+loop プロパティのメール情報リストの数だけループ
+    mail_create_form -> mail_create_form: 画面の件名をメール情報の件名に設定
+    mail_create_form -> mail_create_form: 画面のメッセージをメール情報のメッセージに設定
+    mail_create_form -> mail_logic: メール送信
+    activate mail_logic
+    mail_logic -> mail_data_acces: メール送信保存
+    activate mail_data_acces
+    mail_data_acces -> db: メール送信保存SQL
+    db --> mail_data_acces:
+    mail_data_acces --> mail_logic:
+    deactivate mail_data_acces
+    mail_logic --> mail_create_form:
+    deactivate mail_logic
+end
+mail_create_form -> mail_create_form: 送信完了メッセージを出力
+mail_create_form -> mail_create_form: 新規作成画面を閉じる
+mail_create_form --> user: 
+deactivate mail_create_form
 
 @enduml
