@@ -42,9 +42,10 @@ entity "メールテーブル" as mail {
 
 entity "予定テーブル" as plan {
   *ユーザーID : varchar(20) <<FK>>
-  *予定内容 : text
+  *予定内容 : varchar(10)
   *開始日時 : timestamp
   *終了日時 : timestamp 
+  *備考 : text
   *追加日時 : timestamp
 }
 
