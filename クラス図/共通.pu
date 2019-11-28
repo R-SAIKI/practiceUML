@@ -1,0 +1,34 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+namespace 共通 #FFFFFF {
+  class ユーザー情報 {
+     + ユーザーID : String
+     + ユーザー名 : String
+     + パスワード : String
+     + 権限名 : String
+  }
+
+  class アドレス情報 {
+     + ユーザーID : String
+     + ユーザー名 : String
+  }
+
+  enum ユーザー状態 {
+    ログイン = 0
+    ログアウト = 1
+  }
+
+  class 共通ロジック {
+    + アドレス情報取得() : List<アドレス情報>
+    + ユーザー状態設定(ユーザーID : string, ユーザー状態 : ユーザー状態) : void
+  }
+  
+  class 共通DBアクセス {
+    + アドレス情報取得() : List<アドレス情報>
+    + ログインフラグ更新(ユーザーID : string, ユーザー状態 : int) : void
+  }
+}
+
+@enduml

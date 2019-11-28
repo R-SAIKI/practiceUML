@@ -1,0 +1,68 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "メニューフォーム" as menu_form
+participant "予定フォーム" as plan_form
+participant "予定ロジック" as plan_logic
+participant "共通ロジック" as common_logic
+participant "共通DBアクセス" as common_data_acces
+participant "予定DBアクセス" as plan_data_acces
+database "データベース" as db
+
+user -> menu_form: 予定画面起動ボタン押下
+menu_form -> menu_form: 予定起動ボタンクリックイベント
+activate menu_form
+menu_form -> plan_form: 予定フォームのインスタンス生成
+plan_form -> plan_form: コンストラクタ
+activate plan_form
+plan_form -> plan_form:予定フォームに引数のユーザー情報からログインユーザー名を設定
+plan_form -> plan_form:引数に今日の日付を設定
+plan_form -> plan_form:一週間の予定表示
+activate plan_form
+plan_form -> plan_logic:予定ロジックのインスタンス生成
+plan_form -> plan_form:引数に予定フォームから受け取った日付を設定
+plan_form -> plan_logic:一週間の予定取得
+activate plan_logic
+plan_logic -> plan_logic: 第一引数に予定ロジックから受け取った日付を設定
+plan_logic -> plan_logic: 第二引数に第一引数の日付から一週間後の日付を設定
+plan_logic -> plan_data_acces: 予定情報取得
+activate plan_data_acces
+plan_data_acces -> db: 予定情報取得SQL
+db --> plan_data_acces: 予定情報データ
+plan_data_acces --> plan_logic:予定情報リスト
+deactivate plan_data_acces
+plan_logic -> common_logic: アドレス情報取得
+activate common_logic
+common_logic -> common_data_acces: アドレス情報取得
+activate common_data_acces
+common_data_acces -> db: アドレス情報取得SQL
+db --> common_data_acces: アドレス情報データ
+common_data_acces --> common_logic: アドレス情報リスト
+deactivate common_data_acces
+common_logic --> plan_logic: アドレス情報リスト
+deactivate common_logic
+plan_logic -> plan_logic: 予定表示情報リストのインスタンスを生成
+loop アドレス情報リストの数だけループ
+    plan_logic -> plan_logic: 予定表示情報リストに予定表示情報インスタンスを追加
+    plan_logic -> plan_logic: アドレス情報のユーザー名を予定表示情報のユーザー名に設定
+    plan_logic -> plan_logic: アドレス情報のユーザーIDで予定情報リストを検索
+    plan_logic -> plan_logic: 検索結果を予定表示情報の予定情報リストに設定
+end
+plan_logic --> plan_form: 予定表示情報リスト
+deactivate plan_logic
+loop 予定表示情報リストの数だけループ
+    plan_form -> plan_form: 予定表示情報のユーザー名を画面に表示
+    loop 予定情報リストの数だけループ
+    plan_form -> plan_form: 予定情報を画面に表示
+    end
+end
+plan_form --> plan_form: 戻り値無し
+deactivate plan_form
+plan_form --> user: 
+deactivate plan_form
+
+@enduml

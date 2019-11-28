@@ -18,10 +18,10 @@ menu_form -> mail_form: メールフォームのインスタンス生成
 mail_form -> mail_form: コンストラクタ
 activate mail_form
 mail_form -> mail_form:メールフォームに引数のユーザー情報からログインユーザー名を設定
+mail_form -> mail_logic:メールロジックのインスタンス生成
 mail_form -> mail_form:引数にユーザーIDと列挙型の送受信の受信を設定
 mail_form -> mail_form:メール表示
 activate mail_form
-mail_form -> mail_logic:メールロジックのインスタンス生成
 mail_form -> mail_form:引数にユーザーIDと列挙型の送受信の受信を設定
 mail_form -> mail_logic:メール取得
 activate mail_logic

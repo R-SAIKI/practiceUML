@@ -1,0 +1,20 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "メールフォーム" as mail_form
+
+user -> mail_form: メール終了ボタン押下
+mail_form -> mail_form: メール終了ボタンクリックイベント
+activate mail_form
+mail_form -> mail_form: 確認メッセージボックスを表示
+opt OKの時
+    mail_form -> mail_form: メールフォームを閉じる
+end
+mail_form --> user:
+deactivate mail_form
+
+@enduml

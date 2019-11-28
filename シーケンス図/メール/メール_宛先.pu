@@ -8,6 +8,8 @@ actor "ユーザー" as user
 participant "新規作成フォーム" as mail_create_form
 participant "宛先フォーム" as adress_form
 participant "メールロジック" as mail_logic
+participant "共通ロジック" as common_logic
+participant "共通DBアクセス" as common_data_acces
 participant "メールDBアクセス" as mail_data_acces
 database "データベース" as db
 
@@ -21,12 +23,17 @@ adress_form -> adress_form: コンストラクタ
 activate adress_form
 adress_form -> mail_logic: アドレス情報取得
 activate mail_logic
-mail_logic -> mail_data_acces: アドレス情報取得
-activate mail_data_acces
-mail_data_acces -> db: アドレス情報取得SQL
-db --> mail_data_acces: アドレス情報データ
-mail_data_acces --> mail_logic: メール情報リスト
-deactivate mail_data_acces
+mail_logic -> common_logic: アドレス情報取得
+activate common_logic
+common_logic -> common_data_acces: アドレス情報取得
+activate common_data_acces
+common_data_acces -> db: アドレス情報取得SQL
+db --> common_data_acces: アドレス情報データ
+common_data_acces --> common_logic: アドレス情報リスト
+deactivate common_data_acces
+common_logic --> mail_logic: アドレス情報リスト
+deactivate common_logic
+mail_logic -> mail_logic: アドレス情報リストをメール情報リストに設定
 mail_logic --> adress_form: メール情報リスト
 deactivate mail_logic
 adress_form -> adress_form: プロパティのメール情報リストに設定

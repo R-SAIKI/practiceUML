@@ -1,0 +1,53 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+namespace 予定 #FFFFFF {
+  class 予定フォーム {
+    - ユーザー情報 : ユーザー情報
+    + コンストラクタ(ユーザー情報 : ユーザー情報)
+    - 先週ボタンクリックイベント() : void
+    - 来週ボタンクリックイベント() : void
+    - 予定追加ボタンクリックイベント() : void
+    - 予定編集ボタンクリックイベント() : void
+    - 終了ボックスボタンクリックイベント() : void
+    - 一週間の予定表示(最初の日付 : DateTime) : void
+  }
+  
+  class 予定更新フォーム {
+    - ユーザー情報 : ユーザー情報
+    + コンストラクタ(ユーザー情報 : ユーザー情報, 画面モード : 画面モード)
+    - 追加ボタンクリックイベント() : void
+    - 保存ボタンクリックイベント() : void
+    - 削除ボタンクリックイベント() : void
+    - 施設利用状況表示() : void
+  }
+
+  class 予定ロジック {
+    + 一週間の予定取得(最初の日付 : DateTime) : List<予定表示情報>
+  }
+  
+  class 予定DBアクセス {
+    + 予定情報取得(最初の日付 : DateTime, 最後の日付 : DateTime) : List<予定情報>
+  }
+
+  enum 画面モード {
+    追加 = 0
+    編集 = 1
+  }
+
+  class 予定表示情報 {
+     + ユーザー名 : String
+     + 予定情報リスト : List<予定情報>
+  }
+
+  class 予定情報 {
+     + ユーザーID : String
+     + 予定内容 : String
+     + 開始日時 : DateTime
+     + 終了日時 : DateTime
+     + 備考 : String
+  }
+}
+
+@enduml

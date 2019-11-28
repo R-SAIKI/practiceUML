@@ -1,0 +1,24 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+namespace ログイン #FFFFFF {
+  class ログインフォーム {
+    + コンストラクタ()
+    - ボタンクリックイベント() : void
+    - 未入力チェック() : bool
+  }
+  
+  class ログインロジック {
+     + ユーザー情報 : ユーザー情報
+     + コンストラクタ()
+     + ユーザーチェック(ユーザーID : string, パスワード : string) : bool
+     - パスワードチェック(パスワード : string, ハッシュ値 : string)
+  }
+  
+  class ログインDBアクセス {
+     + ユーザー情報取得(ユーザーID : string) : ユーザー情報
+  }
+}
+
+@enduml

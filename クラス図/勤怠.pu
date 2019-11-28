@@ -1,0 +1,58 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+namespace 勤怠 #FFFFFF {
+
+  enum 月 {
+    1月 = 1
+    2月 = 2
+    3月 = 3
+    4月 = 4
+    5月 = 5
+    6月 = 6
+    7月 = 7
+    8月 = 8
+    9月 = 9
+    10月 = 10
+    11月 = 11
+    12月 = 12
+  }
+
+  class 勤怠フォーム {
+    - ユーザー情報 : ユーザー情報
+    - 勤怠情報リスト : List<勤怠情報>
+    + コンストラクタ(ユーザー情報 : ユーザー情報)
+    - 先月ボタンクリックイベント() : void
+    - 来月ボタンクリックイベント() : void
+    - 保存ボタンクリックイベント() : void
+    - 終了ボタンクリックイベント() : void
+    - 勤怠情報設定(ユーザーID : string, 月 : 月) : void
+    - 画面に勤怠情報表示() : void
+  }
+  
+  class 勤怠ロジック {
+     + 勤怠情報取得(ユーザーID : string, 月 : 月) : List<勤怠情報>
+     + 勤怠情報更新(ユーザーID : string, 勤怠情報リスト : List<勤怠情報>) : void
+  }
+  
+  class 勤怠DBアクセス {
+     + 勤務時間情報取得(ユーザーID : string, 月 : int) : List<勤務時間情報>
+     + 勤務時間情報更新(ユーザーID : string, 月 : int) : void
+  }
+
+  class 勤怠情報 {
+     + 日付 : int
+     + 曜日 : String
+     + 勤務時間情報 : 勤務時間情報
+     + 残業時間 : int
+  }
+
+  class 勤務時間情報 {
+     + 勤務開始時間 : DateTime
+     + 勤務終了時間 : DateTime 
+     + 休憩時間 : int
+  }
+}
+
+@enduml
