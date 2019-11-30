@@ -54,15 +54,19 @@ loop アドレス情報リストの数だけループ
 end
 plan_logic --> plan_form: 予定表示情報リスト
 deactivate plan_logic
+plan_form -> plan_form:表のカラム名の日付と曜日を画面に表示
 loop 予定表示情報リストの数だけループ
-    plan_form -> plan_form: 予定表示情報のユーザー名を画面に表示
+    plan_form -> plan_form: 予定表示情報のユーザー名を表のセルに表示
     loop 予定情報リストの数だけループ
-    plan_form -> plan_form: 予定情報を画面に表示
+        plan_form -> plan_form: 開始日時と終了日時から該当のセルに予定内容と時間を表示
+        opt 予定情報のユーザーIDが自分自身の時
+            plan_form -> plan_form: 表のセルに表のセルクリックイベントを設定
+        end
     end
 end
 plan_form --> plan_form: 戻り値無し
 deactivate plan_form
-plan_form --> user: 
+plan_form --> user: 予定画面
 deactivate plan_form
 
 @enduml

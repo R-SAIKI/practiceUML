@@ -15,12 +15,15 @@ kintai_form -> kintai_form: 先月ボタンクリックイベント
 activate kintai_form
 kintai_form -> kintai_form: 先月を引数に設定
 kintai_form -> kintai_form:勤怠情報設定 起動と同一なので省略
+activate kintai_form
 kintai_form -> kintai_logic:
 kintai_logic -> kintai_data_acces:
 kintai_data_acces -> db:
 db --> kintai_data_acces:
 kintai_data_acces --> kintai_logic:
 kintai_logic --> kintai_form:
+kintai_form --> kintai_form:
+deactivate kintai_form
 kintai_form --> user:
 deactivate kintai_form
 
@@ -29,12 +32,15 @@ kintai_form -> kintai_form: 来月ボタンクリックイベント
 activate kintai_form
 kintai_form -> kintai_form: 来月を引数に設定
 kintai_form -> kintai_form:勤怠情報設定 起動と同一なので省略
+activate kintai_form
 kintai_form -> kintai_logic:
 kintai_logic -> kintai_data_acces:
 kintai_data_acces -> db:
 db --> kintai_data_acces:
 kintai_data_acces --> kintai_logic:
 kintai_logic --> kintai_form:
+kintai_form --> kintai_form:
+deactivate kintai_form
 kintai_form --> user:
 deactivate kintai_form
 

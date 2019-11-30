@@ -49,17 +49,17 @@ entity "予定テーブル" as plan {
   *追加日時 : timestamp
 }
 
-entity "ミーティングルームテーブル" as meeting {
-  *ルームID : varchar(20) <<PK>>
-  *ルーム名 : text 
-  *開放開始時間 : text
-  *開放終了時間 : text
+entity "施設テーブル" as meeting {
+  *施設ID : varchar(20) <<PK>>
+  *施設名 : text 
+  *開放開始時間 : timestamp
+  *開放終了時間 : timestamp
   *更新日時 : timestamp
 }
 
-entity "使用状況テーブル" as use {
+entity "施設利用状況テーブル" as use {
   *ユーザーID : varchar(20) <<FK>>
-  *ルームID : varchar(20) <<FK>>
+  *施設ID : varchar(20) <<FK>>
   *開始日時 : timestamp
   *終了日時 : timestamp 
   *追加日時 : timestamp

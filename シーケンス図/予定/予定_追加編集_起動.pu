@@ -5,46 +5,71 @@ skinparam maxmessagesize 60
 skinparam sequenceParticipant underline
 
 actor "ユーザー" as user
-participant "メニューフォーム" as menu_form
-participant "メールフォーム" as mail_form
-participant "メールロジック" as mail_logic
-participant "メールDBアクセス" as mail_data_acces
+participant "予定フォーム" as plan_form
+participant "予定更新フォーム" as plan_update_form
+participant "予定ロジック" as plan_logic
+participant "予定DBアクセス" as plan_data_acces
 database "データベース" as db
 
-user -> menu_form: メール画面起動ボタン押下
-menu_form -> menu_form: メール起動ボタンクリックイベント
-activate menu_form
-menu_form -> mail_form: メールフォームのインスタンス生成
-mail_form -> mail_form: コンストラクタ
-activate mail_form
-mail_form -> mail_form:メールフォームに引数のユーザー情報からログインユーザー名を設定
-mail_form -> mail_logic:メールロジックのインスタンス生成
-mail_form -> mail_form:引数にユーザーIDと列挙型の送受信の受信を設定
-mail_form -> mail_form:メール表示
-activate mail_form
-mail_form -> mail_form:引数にユーザーIDと列挙型の送受信の受信を設定
-mail_form -> mail_logic:メール取得
-activate mail_logic
-mail_logic -> mail_data_acces: メール受信取得
-activate mail_data_acces
-mail_data_acces -> db: メール受信取得SQL
-db --> mail_data_acces: メール情報データ
-mail_data_acces --> mail_logic:メール情報リスト
-deactivate mail_data_acces
-mail_logic --> mail_form: メール情報リスト
-deactivate mail_logic
-mail_form -> mail_form:プロパティのメール情報リストに設定
-mail_form -> mail_form:返信ボタンを非活性にする
-mail_form -> mail_form:メール一覧表示
-activate mail_form
-mail_form --> mail_form:戻り値無し
-deactivate mail_form
-mail_form --> mail_form:戻り値無し
-deactivate mail_form
-mail_form --> menu_form:
-deactivate mail_form
-menu_form -> mail_form: メールフォームを起動
-mail_form --> user: メール画面
-deactivate menu_form
+user -> plan_form: 表のセルクリック
+plan_form -> plan_form: 表のセルクリックイベント
+activate plan_form
+plan_form -> plan_form: 引数にユーザー情報を設定
+plan_form -> plan_update_form: 予定更新フォームのインスタンス生成
+plan_update_form -> plan_update_form: コンストラクタ
+activate plan_update_form
+plan_update_form -> plan_update_form:ユーザー情報をプロパティに設定
+opt クリックされたセルの値が空の時
+    plan_update_form -> plan_update_form: 追加画面表示
+    activate plan_update_form
+    plan_update_form -> plan_logic: 予定ロジックのインスタンス生成
+    plan_update_form -> plan_update_form: 予定更新情報のインスタンス生成
+    plan_update_form -> plan_logic: 予定更新情報取得
+    activate plan_logic
+    plan_logic -> plan_logic: 予定更新情報のインスタンス生成
+    plan_logic -> plan_data_acces: 予定内容取得
+    activate plan_data_acces
+    plan_data_acces -> db: 予定内容取得SQL
+    db --> plan_data_acces: 予定内容データ
+    plan_data_acces --> plan_logic:予定内容リスト
+    deactivate plan_data_acces
+    plan_logic -> plan_logic: 予定更新情報に予定内容リストを設定
+    plan_logic -> plan_data_acces: 施設情報取得
+    activate plan_data_acces
+    plan_data_acces -> db: 施設情報取得SQL
+    db --> plan_data_acces: 施設情報データ
+    plan_data_acces --> plan_logic:施設情報リスト
+    deactivate plan_data_acces
+    plan_logic -> plan_logic: 予定更新情報に施設情報リストを設定
+    plan_logic -> plan_data_acces: 一週間の施設利用情報取得
+    activate plan_data_acces
+    plan_data_acces -> db: 施設利用情報取得SQL
+    db --> plan_data_acces: 施設利用情報データ
+    plan_data_acces --> plan_logic:施設利用情報リスト
+    deactivate plan_data_acces
+    plan_logic -> plan_logic: 施設表示情報リストのインスタンスを生成
+    loop 施設情報リストの数だけループ
+        plan_logic -> plan_logic: 施設表示情報リストに施設表示情報インスタンスを追加
+        plan_logic -> plan_logic: 施設情報の施設名を施設表示情報の施設名に設定
+        plan_logic -> plan_logic: 施設情報の施設IDで施設利用情報リストを検索
+        plan_logic -> plan_logic: 検索結果を施設表示情報の施設利用情報リストに設定
+    end
+    plan_logic -> plan_logic: 予定更新情報に施設表示情報リストを設定    
+    plan_logic --> plan_update_form: 予定更新情報
+    deactivate plan_logic
+    plan_update_form -> plan_update_form:予定更新情報の予定内容リストに「選択してください」を追加
+    plan_update_form -> plan_update_form:予定更新情報の予定内容リストを画面のコンボボックスに設定
+    plan_update_form -> plan_update_form:予定更新情報の施設情報リストに「使用する場合は選択してください」を追加
+    plan_update_form -> plan_update_form:予定更新情報の施設情報リストを画面のコンボボックスに設定
+    plan_update_form -> plan_update_form:予定更新情報の施設表示情報リストを画面に表示
+    plan_update_form -> plan_update_form:画面の初期日時は今日の日付と業務の定時を設定
+    plan_update_form --> user: 予定追加画面
+    plan_update_form --> plan_update_form: 戻り値無し
+    deactivate plan_update_form
+end
+opt 引数の画面モードが編集の時
+    plan_update_form -> plan_update_form:予定編集画面設定\n予定編集ボタンで詳細を記述したので省略
+end
+
 
 @enduml

@@ -1,0 +1,62 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "予定フォーム" as plan_form
+participant "予定ロジック" as plan_logic
+participant "共通ロジック" as common_logic
+participant "共通DBアクセス" as common_data_acces
+participant "予定DBアクセス" as plan_data_acces
+database "データベース" as db
+
+user -> plan_form: 先週ボタン押下
+plan_form -> plan_form: 先週ボタンクリックイベント
+activate plan_form
+plan_form -> plan_form: 一週間前の日付を引数に設定
+plan_form -> plan_form:一週間の予定表示 起動と同一なので省略
+plan_form -> plan_logic:
+plan_logic -> plan_data_acces:
+plan_data_acces -> db:
+db --> plan_data_acces:
+plan_data_acces --> plan_logic:
+plan_logic --> plan_form:
+plan_form -> common_logic:
+common_logic -> common_data_acces:
+common_data_acces -> db:
+db --> common_data_acces:
+common_data_acces --> common_logic:
+common_logic --> plan_form:
+plan_form --> user:
+deactivate plan_form
+
+user -> plan_form: 来週ボタン押下
+plan_form -> plan_form: 来週ボタンクリックイベント
+activate plan_form
+plan_form -> plan_form: 一週間後の日付を引数に設定
+plan_form -> plan_form:一週間の予定表示 起動と同一なので省略
+plan_form -> plan_logic:
+plan_logic -> plan_data_acces:
+plan_data_acces -> db:
+db --> plan_data_acces:
+plan_data_acces --> plan_logic:
+plan_logic --> plan_form:
+plan_form -> common_logic:
+common_logic -> common_data_acces:
+common_data_acces -> db:
+db --> common_data_acces:
+common_data_acces --> common_logic:
+common_logic --> plan_form:
+plan_form --> user:
+deactivate plan_form
+
+user -> plan_form: 終了ボタン押下
+plan_form -> plan_form: 終了ボタンクリックイベント
+activate plan_form
+plan_form -> plan_form: 予定フォームを閉じる
+plan_form --> user:
+deactivate plan_form
+
+@enduml
