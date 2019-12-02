@@ -1,0 +1,59 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "予定更新フォーム" as plan_update_form
+participant "予定ロジック" as plan_logic
+participant "予定DBアクセス" as plan_data_acces
+database "データベース" as db
+
+user -> plan_update_form: 先週ボタン押下
+plan_update_form -> plan_update_form: 先週ボタンクリックイベント
+activate plan_update_form
+plan_update_form -> plan_update_form: 一週間前の日付を引数に設定
+plan_update_form -> plan_update_form:施設利用状況表示 起動と同一なので省略
+activate plan_update_form
+plan_update_form -> plan_logic:
+plan_logic -> plan_data_acces:
+plan_data_acces -> db:
+db --> plan_data_acces:
+plan_data_acces --> plan_logic:
+plan_logic --> plan_update_form:
+plan_update_form -> plan_logic:
+plan_logic -> plan_data_acces:
+plan_data_acces -> db:
+db --> plan_data_acces:
+plan_data_acces --> plan_logic:
+plan_logic --> plan_update_form:
+plan_update_form --> plan_update_form:
+deactivate plan_update_form
+plan_update_form --> user:
+deactivate plan_update_form
+
+user -> plan_update_form: 来週ボタン押下
+plan_update_form -> plan_update_form: 来週ボタンクリックイベント
+activate plan_update_form
+plan_update_form -> plan_update_form: 一週間後の日付を引数に設定
+plan_update_form -> plan_update_form:施設利用状況表示 起動と同一なので省略
+activate plan_update_form
+plan_update_form -> plan_logic:
+plan_logic -> plan_data_acces:
+plan_data_acces -> db:
+db --> plan_data_acces:
+plan_data_acces --> plan_logic:
+plan_logic --> plan_update_form:
+plan_update_form -> plan_logic:
+plan_logic -> plan_data_acces:
+plan_data_acces -> db:
+db --> plan_data_acces:
+plan_data_acces --> plan_logic:
+plan_logic --> plan_update_form:
+plan_update_form --> plan_update_form:
+deactivate plan_update_form
+plan_update_form --> user:
+deactivate plan_update_form
+
+@enduml
