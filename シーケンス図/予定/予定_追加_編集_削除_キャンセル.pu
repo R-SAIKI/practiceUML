@@ -1,0 +1,108 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "予定フォーム" as plan_form
+participant "予定更新フォーム" as plan_update_form
+participant "予定ロジック" as plan_logic
+participant "予定DBアクセス" as plan_data_acces
+database "データベース" as db
+
+user -> plan_update_form: 追加ボタン押下
+plan_update_form -> plan_update_form: 追加ボタンクリックイベント
+activate plan_update_form
+plan_update_form -> plan_update_form: 入力チェック
+activate plan_update_form
+opt 新規で追加するにチェックがあり、かつ空白の時
+plan_update_form --> user: エラーメッセージを出力
+plan_update_form --> plan_update_form: falseを返す
+end
+opt 施設を利用するにチェックがある時
+opt 日時が開放時間外の時
+plan_update_form --> user: エラーメッセージを出力
+plan_update_form --> plan_update_form: falseを返す
+end
+end
+plan_update_form --> plan_update_form: trueを返す
+deactivate plan_update_form
+opt 入力チェックの結果がfalseの時
+plan_update_form --> user: 処理を終了
+end
+plan_update_form -> plan_update_form:登録情報に画面の更新情報を設定
+plan_update_form -> plan_update_form:引数に登録情報と更新種別の追加を設定
+plan_update_form -> plan_logic:予定更新
+activate plan_logic
+plan_logic -> plan_data_acces:予定更新
+activate plan_data_acces
+plan_data_acces -> db:予定更新SQL
+db --> plan_data_acces:
+plan_data_acces --> plan_logic:
+deactivate plan_data_acces
+plan_logic --> plan_update_form:
+deactivate plan_logic
+plan_update_form -> plan_form:追加画面を閉じる
+deactivate plan_update_form
+activate plan_form
+plan_form -> plan_form:一週間の予定表示 起動と同じなので省略
+plan_form --> user:予定画面
+deactivate plan_form
+
+user -> plan_update_form: 編集ボタン押下
+plan_update_form -> plan_update_form: 編集ボタンクリックイベント
+activate plan_update_form
+plan_update_form -> plan_update_form: 入力チェック 追加と同じなので省略
+opt 入力チェックの結果がfalseの時
+plan_update_form --> user: 処理を終了
+end
+plan_update_form -> plan_update_form:登録情報に画面の更新情報を設定
+plan_update_form -> plan_update_form:引数に登録情報と更新種別の編集を設定
+plan_update_form -> plan_logic:予定更新
+activate plan_logic
+plan_logic -> plan_data_acces:予定更新
+activate plan_data_acces
+plan_data_acces -> db:予定更新SQL
+db --> plan_data_acces:
+plan_data_acces --> plan_logic:
+deactivate plan_data_acces
+plan_logic --> plan_update_form:
+deactivate plan_logic
+plan_update_form -> plan_form:編集画面を閉じる
+deactivate plan_update_form
+activate plan_form
+plan_form -> plan_form:一週間の予定表示 起動と同じなので省略
+plan_form --> user:予定画面
+deactivate plan_form
+
+user -> plan_update_form: 削除ボタン押下
+plan_update_form -> plan_update_form: 削除ボタンクリックイベント
+activate plan_update_form
+plan_update_form -> plan_update_form:登録情報に画面の更新情報を設定
+plan_update_form -> plan_update_form:引数に登録情報と更新種別の削除を設定
+plan_update_form -> plan_logic:予定更新
+activate plan_logic
+plan_logic -> plan_data_acces:予定更新
+activate plan_data_acces
+plan_data_acces -> db:予定更新SQL
+db --> plan_data_acces:
+plan_data_acces --> plan_logic:
+deactivate plan_data_acces
+plan_logic --> plan_update_form:
+deactivate plan_logic
+plan_update_form -> plan_form:編集画面を閉じる
+deactivate plan_update_form
+activate plan_form
+plan_form -> plan_form:一週間の予定表示 起動と同じなので省略
+plan_form --> user:予定画面
+deactivate plan_form
+
+user -> plan_update_form: キャンセルボタン押下
+activate plan_update_form
+plan_update_form -> plan_update_form:確認メッセージボックスを出力
+opt OKの時
+plan_update_form -> plan_update_form:予定更新フォームを閉じる
+plan_update_form --> user:予定画面
+end
+@enduml

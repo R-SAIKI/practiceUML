@@ -56,4 +56,32 @@ deactivate plan_update_form
 plan_update_form --> user:
 deactivate plan_update_form
 
+user -> plan_update_form: 新規で追加するチェックボックスのON
+plan_update_form -> plan_update_form: 新規で追加するチェックボックスクリックイベント
+activate plan_update_form
+plan_update_form -> plan_update_form: 予定内容のコンボボックスを非活性にする
+plan_update_form -> plan_update_form:新規のコンボボックスを活性にする
+plan_update_form --> user:
+deactivate plan_update_form
+user -> plan_update_form: 新規で追加するチェックボックスのOFF
+plan_update_form -> plan_update_form: 新規で追加するチェックボックスクリックイベント
+activate plan_update_form
+plan_update_form -> plan_update_form: 予定内容のコンボボックスを活性にする
+plan_update_form -> plan_update_form:新規のコンボボックスを非活性にする
+plan_update_form --> user:
+deactivate plan_update_form
+
+user -> plan_update_form: 使用するチェックボックスのON
+plan_update_form -> plan_update_form: 使用するチェックボックスクリックイベント
+activate plan_update_form
+plan_update_form -> plan_update_form:施設のコンボボックスを活性にする
+plan_update_form --> user:
+deactivate plan_update_form
+user -> plan_update_form: 使用するチェックボックスのOFF
+plan_update_form -> plan_update_form: 使用するチェックボックスクリックイベント
+activate plan_update_form
+plan_update_form -> plan_update_form:施設のコンボボックスを非活性にする
+plan_update_form --> user:
+deactivate plan_update_form
+
 @enduml

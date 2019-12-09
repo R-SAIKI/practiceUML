@@ -46,12 +46,11 @@ entity "予定テーブル" as plan {
   *予定内容 : varchar(10)
   *開始日時 : timestamp
   *終了日時 : timestamp 
-  *備考 : text
   *追加日時 : timestamp
 }
 
 entity "施設テーブル" as meeting {
-  *施設ID : varchar(20) <<PK>>
+  *施設ID : numeric <<PK>>
   *施設名 : text 
   *開放開始時間 : timestamp
   *開放終了時間 : timestamp
@@ -60,9 +59,8 @@ entity "施設テーブル" as meeting {
 
 entity "施設利用状況テーブル" as use {
   *ユーザーID : varchar(20) <<FK>>
-  *施設ID : varchar(20) <<FK>>
-  *開始日時 : timestamp
-  *終了日時 : timestamp 
+  *施設ID : numeric <<FK>>
+  *予定ID : numeric <<FK>>
   *追加日時 : timestamp
 }
 
@@ -72,5 +70,6 @@ user ||--o{ mail
 user ||--o{ plan
 user ||--o{ use
 use }o--|| meeting
+plan ||--o| use
 
 @enduml

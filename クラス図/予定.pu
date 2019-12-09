@@ -15,16 +15,23 @@ namespace 予定 #FFFFFF {
   
   class 予定更新フォーム {
     - ユーザー情報 : ユーザー情報
+    - 施設情報リスト : List<施設情報>
     + コンストラクタ(ユーザー情報 : ユーザー情報)
     - 追加ボタンクリックイベント() : void
     - 保存ボタンクリックイベント() : void
     - 削除ボタンクリックイベント() : void
+    - 新規で追加するチェックボックスクリックイベント() : void
+    - 使用するチェックボックスクリックイベント() : void
     - 編集画面表示() : void
     - 追加画面表示() : void
+    - 入力チェック() : void
+    - 画面共通項目設定() : void
     - 施設利用状況表示(最初の日付 : DateTime) : void
   }
 
   class 予定ロジック {
+    + 予定更新(登録情報 : 登録情報, 更新種別 : 更新種別) : void
+    + 予定削除(予定ID : int) : void
     + 予定内容取得() : List<string>
     + 施設情報取得() : List<施設情報>
     + 一週間の予定取得(最初の日付 : DateTime) : List<予定表示情報>
@@ -32,6 +39,7 @@ namespace 予定 #FFFFFF {
   }
   
   class 予定DBアクセス {
+    + 予定更新(登録情報 : 登録情報, 更新種別 : 更新種別) : void
     + 予定情報取得(最初の日付 : DateTime, 最後の日付 : DateTime) : List<予定情報>
     + 予定内容取得() : List<string>
     + 施設情報取得() : List<施設情報>
@@ -45,11 +53,11 @@ namespace 予定 #FFFFFF {
   }
 
   class 予定情報 {
+     + 予定ID : int
      + ユーザーID : String
      + 予定内容 : String
      + 開始日時 : DateTime
      + 終了日時 : DateTime
-     + 備考 : String
   }
 
   class 施設情報 {
@@ -73,6 +81,21 @@ namespace 予定 #FFFFFF {
      + 施設ID : String
      + 開始日時 : DateTime
      + 終了日時 : DateTime
+  }
+
+  class 登録情報 {
+     + 予定ID : int
+     + 施設ID : String
+     + ユーザーID : String
+     + 予定内容 : String
+     + 開始日時 : DateTime
+     + 終了日時 : DateTime
+  }
+
+  enum 更新種別 {
+    追加 = 0
+    編集 = 1
+    削除 = 2
   }
 }
 

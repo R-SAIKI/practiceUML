@@ -61,6 +61,7 @@ loop 予定表示情報リストの数だけループ
         plan_form -> plan_form: 開始日時と終了日時から該当のセルに予定内容と時間を表示
         opt 予定情報のユーザーIDが自分自身の時
             plan_form -> plan_form: 表のセルに表のセルクリックイベントを設定
+            plan_form -> plan_form: 表のセルのName属性に予定IDを設定
         end
     end
 end

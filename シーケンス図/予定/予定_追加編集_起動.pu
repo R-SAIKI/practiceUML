@@ -22,6 +22,8 @@ plan_update_form -> plan_update_form:ユーザー情報をプロパティに設�
 alt クリックされたセルの値が空の時
     plan_update_form -> plan_update_form: 追加画面表示
     activate plan_update_form
+    plan_update_form -> plan_update_form: 画面共通項目設定
+    activate plan_update_form
     plan_update_form -> plan_logic: 予定ロジックのインスタンス生成
     plan_update_form -> plan_logic: 予定内容取得
     activate plan_logic
@@ -77,17 +79,29 @@ alt クリックされたセルの値が空の時
     end
     plan_update_form --> plan_update_form:戻り値無し
     deactivate plan_update_form
-    plan_update_form -> plan_update_form:予定内容リストに「選択してください」を追加
     plan_update_form -> plan_update_form:予定内容リストを画面のコンボボックスに設定
-    plan_update_form -> plan_update_form:施設情報リストに「使用する場合は選択してください」を追加
-    plan_update_form -> plan_update_form:施設情報リストを画面のコンボボックスに設定
+    plan_update_form -> plan_update_form:施設情報リストをプロパティに設定
+    plan_update_form -> plan_update_form:画面のコンボボックスに施設名を設定
+    plan_update_form -> plan_update_form:画面のラベルに施設の開放時間を設定
+    plan_update_form -> plan_update_form:新規のコンボボックスを非活性にする
+    plan_update_form -> plan_update_form:施設のコンボボックスを非活性にする
+    plan_update_form -> plan_update_form:画面の年月日時分のコンボボックスにとりうる値の範囲を設定
     plan_update_form -> plan_update_form:画面の初期日時は今日の日付と業務の定時を設定
+    plan_update_form --> plan_update_form: 戻り値無し
+    deactivate plan_update_form
+    plan_update_form -> plan_update_form:追加ボタン表示
+    plan_update_form -> plan_update_form:画面名を予定追加に設定
     plan_update_form --> user: 予定追加画面
     plan_update_form --> plan_update_form: 戻り値無し
     deactivate plan_update_form
-else 引数の画面モードが編集の時
+else クリックされたセルに値が存在する時
     plan_update_form -> plan_update_form:編集画面表示
+    plan_update_form -> plan_update_form: 画面共通項目設定　追加と同じなので省略
+    plan_update_form -> plan_update_form:編集ボタンと追加ボタン表示
+    plan_update_form --> user: 予定編集画面
+    plan_update_form --> plan_update_form: 戻り値無し
 end
+deactivate plan_update_form
 
 
 @enduml
