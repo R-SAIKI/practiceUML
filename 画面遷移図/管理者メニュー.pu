@@ -20,12 +20,12 @@ subMenu -right-> "
 salt
 {+
 <b>ユーザー管理
-{[新規登録] | [編集] | [削除] | [終了]}
+{[ユーザー追加] | [ユーザー削除] | [保存] | [キャンセル] | [終了]}
 {#
-ユーザーID | ユーザー名 | 権限名
-value1 | value2 | value3
-value1 | value2 | value3
-value1 | value2 | value3
+ユーザーID | ユーザー名 | パスワード | 権限名
+value1 | value2 | value3 | 一般
+value1 | value2 | value3 | 一般
+value1 | value2 | value3 | 一般
 }
 }
 }}
@@ -35,7 +35,6 @@ subMenu -down-> "
 salt
 {+
 <b>勤怠の一括エクセル出力
-ログインユーザー：田中
 {ユーザー名： | ^選択してください^}
 {月： | ^選択してください^}
 {[出力] | [全ユーザーの一括出力] | [終了]}

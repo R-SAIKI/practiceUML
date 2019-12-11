@@ -1,0 +1,28 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+namespace ユーザー管理 #FFFFFF {
+  class ユーザー管理フォーム {
+    - ユーザー情報リスト : List<ユーザー情報>
+    - ユーザー追加ボタンクリックイベント() : void
+    - ユーザー削除ボタンクリックイベント() : void
+    - キャンセルボタンクリックイベント() : void
+    - 保存ボタンクリックイベント() : void
+    - 終了ボタンクリックイベント() : void
+    - ユーザー一覧表示() : void
+  }
+  
+  class ユーザー管理ロジック {
+    + 一般ユーザー情報一覧取得(ユーザーID : string) : List<ユーザー情報>
+    + ユーザー削除(ユーザーID : string) : void
+  }
+  
+  class ユーザー管理DBアクセス {
+    + 一般ユーザー情報一覧取得() : List<ユーザー情報>
+    + ユーザー削除フラグ更新(ユーザーID : string, 削除フラグ : int) : void
+  }
+
+}
+
+@enduml

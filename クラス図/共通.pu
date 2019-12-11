@@ -7,6 +7,7 @@ namespace 共通 #FFFFFF {
      + ユーザーID : String
      + ユーザー名 : String
      + パスワード : String
+     + 権限ID : int
      + 権限名 : String
   }
 
@@ -28,6 +29,11 @@ namespace 共通 #FFFFFF {
   class 共通DBアクセス {
     + アドレス情報取得() : List<アドレス情報>
     + ログインフラグ更新(ユーザーID : string, ユーザー状態 : int) : void
+  }
+
+  enum 権限 {
+    一般 = 0
+    管理者 = 1
   }
 }
 

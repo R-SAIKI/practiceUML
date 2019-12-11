@@ -83,7 +83,11 @@ alt ユーザーチェックの結果がtrueの時
     activate menu_form
     menu_form -> menu_form: メニューフォームにユーザー情報から権限名を設定
     menu_form -> menu_form: メニューフォームにユーザー情報からユーザー名を設定
-    menu_form -> menu_form: 画面モード切り替え
+    alt 権限IDが一般の時
+    menu_form -> menu_form: 画面を一般メニューに設定する
+    else 権限IDが管理者の時
+    menu_form -> menu_form: 画面を管理者メニューに設定する    
+    end
     activate menu_form
     menu_form --> menu_form: 
     deactivate menu_form

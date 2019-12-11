@@ -1,0 +1,53 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "メニューフォーム" as menu_form
+participant "ユーザー管理フォーム" as user_admin_form
+participant "ユーザー管理ロジック" as user_admin_logic
+participant "ユーザー管理DBアクセス" as user_admin_data
+database "データベース" as db
+
+user -> menu_form: ユーザー管理画面起動ボタン押下
+menu_form -> menu_form: ユーザー管理起動ボタンクリックイベント
+activate menu_form
+menu_form -> user_admin_form: ユーザー管理フォームのインスタンス生成
+user_admin_form -> user_admin_form: コンストラクタ
+activate user_admin_form
+user_admin_form -> user_admin_form:ユーザー一覧表示
+activate user_admin_form
+user_admin_form -> user_admin_logic:ユーザー管理ロジックのインスタンス生成
+user_admin_form -> user_admin_logic:一般ユーザー情報一覧取得
+activate user_admin_logic
+user_admin_logic -> user_admin_data: 一般ユーザー情報一覧取得
+activate user_admin_data
+user_admin_data -> db: 一般ユーザー情報一覧取得SQL
+db --> user_admin_data: ユーザー情報一覧データ
+user_admin_data --> user_admin_logic:ユーザー情報リスト
+deactivate user_admin_data
+user_admin_logic --> user_admin_form: ユーザー情報リスト
+deactivate user_admin_logic
+user_admin_form -> user_admin_form:プロパティのユーザー情報リストに設定
+user_admin_form -> user_admin_form:ユーザー情報リストを表形式で画面に表示
+user_admin_form -> user_admin_form:ユーザーIDは編集できないようにする
+user_admin_form -> user_admin_form:キャンセルボタンを非活性にする
+user_admin_form -> user_admin_form:保存ボタンを非活性にする
+user_admin_form -> user_admin_form:権限名は共通の列挙体の権限名をコンボボックスに設定
+user_admin_form --> user_admin_form:戻り値無し
+deactivate user_admin_form
+user_admin_form --> user: ユーザー管理画面
+deactivate user_admin_form
+
+user -> user_admin_form: 終了ボタン押下
+user_admin_form -> user_admin_form: 終了ボタンクリックイベント
+activate user_admin_form
+user_admin_form -> user_admin_form: 確認メッセージボックスを表示
+opt OKの時
+    user_admin_form -> user_admin_form: ユーザー管理フォームを閉じる
+end
+user_admin_form --> user:
+
+@enduml

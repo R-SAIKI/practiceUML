@@ -1,0 +1,57 @@
+@startuml
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+skinparam sequenceParticipant underline
+
+actor "ユーザー" as user
+participant "ユーザー管理フォーム" as user_admin_form
+participant "ユーザー管理ロジック" as user_admin_logic
+participant "ユーザー管理DBアクセス" as user_admin_data
+database "データベース" as db
+
+user -> user_admin_form: ユーザー追加ボタン押下
+user_admin_form -> user_admin_form: ユーザー追加ボタンクリックイベント
+activate user_admin_form
+user_admin_form -> user_admin_form: 表に値が空の行を追加する
+user_admin_form -> user_admin_form: キャンセルボタンを活性にする
+user_admin_form -> user_admin_form: 保存ボタンを活性にする
+user_admin_form -> user_admin_form: 削除ボタンを非活性にする
+user_admin_form --> user: 
+deactivate user_admin_form
+
+user -> user_admin_form: ユーザー削除ボタン押下
+user_admin_form -> user_admin_form: ユーザー削除ボタンクリックイベント
+activate user_admin_form
+user_admin_form -> user_admin_form: 確認メッセージを表示
+opt 確認メッセージの結果がOKの時
+user_admin_form -> user_admin_form: 選択行のユーザーIDを引数に設定
+user_admin_form -> user_admin_logic: ユーザー削除
+activate user_admin_logic
+user_admin_logic -> user_admin_logic: 引数を1に設定
+user_admin_logic -> user_admin_data: ユーザー削除フラグ更新
+activate user_admin_data
+user_admin_data -> db: ユーザー削除フラグ更新SQL
+db --> user_admin_data: 
+user_admin_data --> user_admin_logic: 
+deactivate user_admin_data
+user_admin_logic --> user_admin_form: 
+deactivate user_admin_logic
+user_admin_form -> user_admin_form: ユーザー一覧表示 起動と同じなので省略
+end
+user_admin_form --> user: 
+deactivate user_admin_form
+
+user -> user_admin_form: キャンセルボタン押下
+user_admin_form -> user_admin_form: キャンセルボタンクリックイベント
+activate user_admin_form
+user_admin_form -> user_admin_form: 確認メッセージを表示
+opt 確認メッセージの結果がOKの時
+user_admin_form -> user_admin_form: 編集中の行を削除する
+user_admin_form -> user_admin_form: キャンセルボタンを非活性にする
+user_admin_form -> user_admin_form: 削除ボタンを活性にする
+end
+user_admin_form --> user: 
+deactivate user_admin_form
+
+@enduml
